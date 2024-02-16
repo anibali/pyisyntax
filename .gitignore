@@ -1,0 +1,24 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary files
+*.swp
+*~
+
+# Development environment
+.idea/
+.vscode/
+.envrc
+
+# Core dumps
+core
+
+# Project-specific ignores
+/tests/data/testslide.isyntax
+/build/
+/dist/
+*.egg-info/
+.eggs/
+*.so

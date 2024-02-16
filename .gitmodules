@@ -1,0 +1,3 @@
+[submodule "vendor/libisyntax"]
+	path = isyntax_build/vendor/libisyntax
+	url = git@github.com:amspath/libisyntax.git

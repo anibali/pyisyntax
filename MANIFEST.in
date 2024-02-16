@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+
+graft isyntax_build
+graft tests
+
+recursive-exclude */.pytest_cache *
+recursive-exclude */__pycache__ *

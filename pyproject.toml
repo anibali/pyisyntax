@@ -1,0 +1,59 @@
+[project]
+name = "pyisyntax"
+version = "0.1.0"
+description = "Python bindings for libisyntax"
+readme = { content-type = "text/markdown", file = "README.md" }
+authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+  "cffi>=1.12",
+  "pytest",
+  "ruff==0.2.1",
+]
+
+[tool.conda-lock]
+channels = [
+  "conda-forge",
+]
+
+[tool.conda-lock.dependencies]
+python = "3.10.*"
+
+[build-system]
+requires = [
+    "cffi>=1.12",
+    "setuptools>=45",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D1",  # undocumented-
+  "PLR0913",  # too-many-arguments
+]
+pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+  "S101",  # assert
+  "FBT",  # flake8-boolean-trap
+]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.setuptools]
+packages = ["isyntax"]
