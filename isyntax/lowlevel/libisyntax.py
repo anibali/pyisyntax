@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, NewType
 
 from _pyisyntax import ffi, lib
 
-from isyntax.lowlevel.io_management import SizedIO, init_python_io_hooks, register_io
+from isyntax.lowlevel.io_management import init_python_io_hooks, register_io
 
 if TYPE_CHECKING:
     from typing_extensions import Buffer
