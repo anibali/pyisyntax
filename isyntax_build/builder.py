@@ -1,4 +1,3 @@
-import platform
 from importlib import resources
 from pathlib import Path
 
@@ -14,17 +13,11 @@ def paths_to_strings(*paths: Path) -> list[str]:
 def create_ffibuilder() -> FFI:
     ffibuilder = FFI()
 
-    with resources.path(isyntax_build, "vendor") as vendor:
+    with (
+        resources.path(isyntax_build, "vendor") as vendor,
+        resources.path(isyntax_build, "python_platform_utils.c") as platform_utils,
+    ):
         libisyntax_src = vendor/"libisyntax"/"src"
-
-        if platform.system() == "Windows":
-            platform_sources = [
-                libisyntax_src/"platform"/"win32_utils.c",
-            ]
-        else:
-            platform_sources = [
-                libisyntax_src/"platform"/"linux_utils.c",
-            ]
 
         ffibuilder.set_source(
             "_pyisyntax",
@@ -40,7 +33,7 @@ def create_ffibuilder() -> FFI:
                 libisyntax_src/"platform"/"work_queue.c",
                 libisyntax_src/"third_party"/"yxml.c",
                 libisyntax_src/"third_party"/"ltalloc.cc",
-                *platform_sources,
+                platform_utils,
             ),
             include_dirs=paths_to_strings(
                 libisyntax_src,
@@ -58,6 +51,7 @@ def create_ffibuilder() -> FFI:
                     continue
                 header_lines.append(line)
         header_text = "".join(header_lines)
+        header_text += "\n\n" + resources.read_text(isyntax_build, "python_platform_utils.h")
 
         ffibuilder.cdef(header_text)
 

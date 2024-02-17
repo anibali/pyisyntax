@@ -4,18 +4,18 @@ from pathlib import Path
 import pytest
 
 from isyntax.lowlevel import libisyntax
+from isyntax.lowlevel.io_management import ByHandleRegistry
 from isyntax.lowlevel.libisyntax import (
     ISyntaxCachePtr,
     ISyntaxImagePtr,
     ISyntaxLevelPtr,
     ISyntaxPtr,
-    LibISyntaxFatalError,
 )
 
 
 @pytest.fixture()
 def isyntax(sample_isyntax_file: Path) -> Iterator[ISyntaxPtr]:
-    isyntax = libisyntax.open(str(sample_isyntax_file))
+    isyntax = libisyntax.open_from_filename(sample_isyntax_file)
     yield isyntax
     libisyntax.close(isyntax)
 
@@ -39,13 +39,13 @@ def isyntax_cache(isyntax: ISyntaxPtr) -> Iterator[ISyntaxCachePtr]:
 
 
 def test_libisyntax_open_and_close(sample_isyntax_file: Path) -> None:
-    isyntax = libisyntax.open(str(sample_isyntax_file))
+    isyntax = libisyntax.open_from_filename(sample_isyntax_file)
     libisyntax.close(isyntax)
 
 
 def test_libisyntax_open_nonexistent_file() -> None:
-    with pytest.raises(LibISyntaxFatalError):
-        libisyntax.open("this_file_does_not_exist.isyntax")
+    with pytest.raises(FileNotFoundError):
+        libisyntax.open_from_filename("this_file_does_not_exist.isyntax")
 
 
 def test_libisyntax_get_tile_width(isyntax: ISyntaxPtr) -> None:
@@ -126,3 +126,19 @@ def test_libisyntax_read_region(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCache
     actual = tuple(rgba)
     expected = (226, 226, 229, 255)
     assert actual == expected
+
+
+class TestByHandleRegistry:
+    def test_handles_holes_correctly(self) -> None:
+        registry = ByHandleRegistry[str]()
+        registry.add("A")
+        registry.add("B")
+        registry.add("C")
+        registry.add("D")
+        assert registry.pop(3) == "C"
+        registry.add("E")
+        assert registry.pop(3) == "E"
+        assert registry.pop(4) == "D"
+        registry.add("F")
+        assert registry.pop(1) == "A"
+        assert list(registry.items()) == [(2, "B"), (3, "F")]

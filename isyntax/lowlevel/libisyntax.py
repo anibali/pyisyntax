@@ -1,13 +1,21 @@
+import os
 from enum import IntEnum
+from pathlib import Path
 from typing import TYPE_CHECKING, NewType
 
 from _pyisyntax import ffi, lib
 
+from isyntax.lowlevel.io_management import SizedIO, init_python_io_hooks, register_io
+
 if TYPE_CHECKING:
-    from cffi import FFI
     from typing_extensions import Buffer
 
-    ffi: FFI
+
+ISyntaxPtr = NewType("ISyntaxPtr", object)
+ISyntaxImagePtr = NewType("ISyntaxImagePtr", object)
+ISyntaxLevelPtr = NewType("ISyntaxLevelPtr", object)
+ISyntaxCachePtr = NewType("ISyntaxCachePtr", object)
+
 
 LIBISYNTAX_OK = 0
 # Generic error that the user should not expect to recover from.
@@ -15,12 +23,9 @@ LIBISYNTAX_FATAL = 1
 # One of the arguments passed to a function is invalid.
 LIBISYNTAX_INVALID_ARGUMENT = 2
 
-lib.libisyntax_init()
 
-ISyntaxPtr = NewType("ISyntaxPtr", object)
-ISyntaxImagePtr = NewType("ISyntaxImagePtr", object)
-ISyntaxLevelPtr = NewType("ISyntaxLevelPtr", object)
-ISyntaxCachePtr = NewType("ISyntaxCachePtr", object)
+init_python_io_hooks()
+lib.libisyntax_init()
 
 
 class ISyntaxPixelFormat(IntEnum):
@@ -58,14 +63,21 @@ def check_error(status: int) -> None:
     raise LibISyntaxUnknownError
 
 
-def open(filename: str, *, is_init_allocators: bool = False) -> ISyntaxPtr:  # noqa: A001
+def open_from_registered_handle(handle: int, *, is_init_allocators: bool = False) -> ISyntaxPtr:
     isyntax = ffi.new("isyntax_t**")
     check_error(lib.libisyntax_open(
-        ffi.new("char[]", filename.encode("utf-8")),
+        ffi.new("char[]", str(handle).encode("utf-8")),
         is_init_allocators,
         isyntax,
     ))
     return isyntax[0]
+
+
+def open_from_filename(filename: str | Path, *, is_init_allocators: bool = False) -> ISyntaxPtr:
+    filename = Path(filename)
+    f = filename.open("rb")
+    handle = register_io(f, os.fstat(f.fileno()).st_size)
+    return open_from_registered_handle(handle, is_init_allocators=is_init_allocators)
 
 
 def close(isyntax: ISyntaxPtr) -> None:

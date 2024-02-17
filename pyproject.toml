@@ -43,6 +43,8 @@ select = ["ALL"]
 ignore = [
   "D1",  # undocumented-
   "PLR0913",  # too-many-arguments
+  "ANN101",  # missing-type-self
+  "TRY003",  # raise-vanilla-args
 ]
 pydocstyle.convention = "google"
 
