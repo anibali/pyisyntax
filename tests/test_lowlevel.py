@@ -132,6 +132,8 @@ def test_libisyntax_read_region(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCache
 def test_libisyntax_read_label_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
     free_spy = mocker.spy(libisyntax, "free")
     buf = libisyntax.read_label_image_jpeg(isyntax)
+    jpeg_magic = b"\xff\xd8"
+    assert buf[:2] == jpeg_magic
     expected_size = 60348
     assert len(buf) == expected_size
     # The underlying allocated memory should be freed
@@ -144,6 +146,8 @@ def test_libisyntax_read_label_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFix
 def test_libisyntax_read_macro_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
     free_spy = mocker.spy(libisyntax, "free")
     buf = libisyntax.read_macro_image_jpeg(isyntax)
+    jpeg_magic = b"\xff\xd8"
+    assert buf[:2] == jpeg_magic
     expected_size = 49625
     assert len(buf) == expected_size
     # The underlying allocated memory should be freed

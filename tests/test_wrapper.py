@@ -2,7 +2,9 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from pytest_mock import MockerFixture
 
+from isyntax.lowlevel import libisyntax
 from isyntax.wrapper import ISyntax
 
 
@@ -83,3 +85,29 @@ class TestISyntax:
         actual = tuple(rgba[0, 0])
         expected = (226, 226, 229, 255)
         assert actual == expected
+
+    def test_read_label_image_jpeg(self, isyntax: ISyntax, mocker: MockerFixture) -> None:
+        free_spy = mocker.spy(libisyntax, "free")
+        jpeg_data = isyntax.read_label_image_jpeg()
+        jpeg_magic = b"\xff\xd8"
+        assert jpeg_data[:2].tobytes() == jpeg_magic
+        expected_size = 60348
+        assert len(jpeg_data) == expected_size
+        # The underlying allocated memory should be freed
+        # when the buffer object is garbage collected.
+        free_spy.assert_not_called()
+        del jpeg_data
+        free_spy.assert_called_once()
+
+    def test_read_macro_image_jpeg(self, isyntax: ISyntax, mocker: MockerFixture) -> None:
+        free_spy = mocker.spy(libisyntax, "free")
+        jpeg_data = isyntax.read_macro_image_jpeg()
+        jpeg_magic = b"\xff\xd8"
+        assert jpeg_data[:2].tobytes() == jpeg_magic
+        expected_size = 49625
+        assert len(jpeg_data) == expected_size
+        # The underlying allocated memory should be freed
+        # when the buffer object is garbage collected.
+        free_spy.assert_not_called()
+        del jpeg_data
+        free_spy.assert_called_once()

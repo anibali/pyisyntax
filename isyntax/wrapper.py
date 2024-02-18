@@ -158,6 +158,28 @@ class ISyntax:
             buf.data, libisyntax.ISyntaxPixelFormat.RGBA)
         return buf
 
+    def read_label_image_jpeg(self) -> np.ndarray:
+        """Reads the associated label image as a JPEG-compressed image.
+
+        Returns:
+            Compressed JPEG image data.
+        """
+        # ffi_buf is not actually a bytearray, but we use this type annotation
+        # for compatibility with numpy's type checking.
+        ffi_buf: bytearray = libisyntax.read_label_image_jpeg(self.ptr)  # type: ignore[assignment]
+        return np.frombuffer(ffi_buf, dtype=np.uint8)
+
+    def read_macro_image_jpeg(self) -> np.ndarray:
+        """Reads the associated macro image as a JPEG-compressed image.
+
+        Returns:
+            Compressed JPEG image data.
+        """
+        # ffi_buf is not actually a bytearray, but we use this type annotation
+        # for compatibility with numpy's type checking.
+        ffi_buf: bytearray = libisyntax.read_macro_image_jpeg(self.ptr)  # type: ignore[assignment]
+        return np.frombuffer(ffi_buf, dtype=np.uint8)
+
     @property
     def level_count(self) -> int:
         return self.wsi.level_count
