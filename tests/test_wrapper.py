@@ -90,7 +90,7 @@ class TestISyntax:
         free_spy = mocker.spy(libisyntax, "free")
         jpeg_data = isyntax.read_label_image_jpeg()
         jpeg_magic = b"\xff\xd8"
-        assert jpeg_data[:2].tobytes() == jpeg_magic
+        assert jpeg_data[:2] == jpeg_magic
         expected_size = 60348
         assert len(jpeg_data) == expected_size
         # The underlying allocated memory should be freed
@@ -103,7 +103,7 @@ class TestISyntax:
         free_spy = mocker.spy(libisyntax, "free")
         jpeg_data = isyntax.read_macro_image_jpeg()
         jpeg_magic = b"\xff\xd8"
-        assert jpeg_data[:2].tobytes() == jpeg_magic
+        assert jpeg_data[:2] == jpeg_magic
         expected_size = 49625
         assert len(jpeg_data) == expected_size
         # The underlying allocated memory should be freed

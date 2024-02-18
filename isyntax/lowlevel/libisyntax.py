@@ -8,15 +8,11 @@ from _pyisyntax import ffi, lib
 from isyntax.lowlevel.io_management import init_python_io_hooks, register_io
 
 if TYPE_CHECKING:
-    from collections.abc import Sized
-
+    from cffi import FFI
     from typing_extensions import Buffer
 
-    class FFIBuffer(Buffer, Sized):
-        pass
 
-
-Pointer = NewType("Pointer", object)
+Pointer = NewType("Pointer", "FFI.CData")
 ISyntaxPtr = NewType("ISyntaxPtr", Pointer)
 ISyntaxImagePtr = NewType("ISyntaxImagePtr", Pointer)
 ISyntaxLevelPtr = NewType("ISyntaxLevelPtr", Pointer)
@@ -186,7 +182,7 @@ def tile_read(
     level: int,
     tile_x: int,
     tile_y: int,
-    pixels_buffer: "Buffer",
+    pixels_buffer: "Buffer | FFI.buffer",
     pixel_format: ISyntaxPixelFormat,
 ) -> None:
     check_error(lib.libisyntax_tile_read(
@@ -208,7 +204,7 @@ def read_region(
     y: int,
     width: int,
     height: int,
-    pixels_buffer: "Buffer",
+    pixels_buffer: "Buffer | FFI.buffer",
     pixel_format: ISyntaxPixelFormat,
 ) -> None:
     check_error(lib.libisyntax_read_region(
@@ -224,7 +220,7 @@ def read_region(
     ))
 
 
-def read_label_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
+def read_label_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
     jpeg_buffer_ptr = ffi.new("uint8_t**")
     jpeg_size_ptr = ffi.new("uint32_t*")
     check_error(lib.libisyntax_read_label_image_jpeg(
@@ -234,10 +230,10 @@ def read_label_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
     ))
     jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
     jpeg_size = jpeg_size_ptr[0]
-    return ffi.buffer(jpeg_buffer, jpeg_size)
+    return memoryview(ffi.buffer(jpeg_buffer, jpeg_size))
 
 
-def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
+def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
     jpeg_buffer_ptr = ffi.new("uint8_t**")
     jpeg_size_ptr = ffi.new("uint32_t*")
     check_error(lib.libisyntax_read_macro_image_jpeg(
@@ -247,4 +243,4 @@ def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
     ))
     jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
     jpeg_size = jpeg_size_ptr[0]
-    return ffi.buffer(jpeg_buffer, jpeg_size)
+    return memoryview(ffi.buffer(jpeg_buffer, jpeg_size))
