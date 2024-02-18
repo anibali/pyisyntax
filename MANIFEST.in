@@ -2,7 +2,13 @@ include README.md
 include LICENSE
 
 graft isyntax_build
-graft tests
+prune isyntax_build/vendor/libisyntax
+graft isyntax_build/vendor/libisyntax/src
+include isyntax_build/vendor/libisyntax/LICENSE.txt
+include isyntax_build/vendor/libisyntax/README.md
 
-recursive-exclude */.pytest_cache *
-recursive-exclude */__pycache__ *
+graft tests
+recursive-exclude tests *.isyntax
+
+prune */.pytest_cache
+prune */__pycache__
