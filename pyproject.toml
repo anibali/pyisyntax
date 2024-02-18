@@ -13,6 +13,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "cffi>=1.12",
+  "conda-lock",
   "pytest",
   "pytest-mock",
   "ruff==0.2.1",
