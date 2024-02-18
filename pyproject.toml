@@ -7,12 +7,12 @@ authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
 requires-python = ">=3.10"
 license = { text = "MIT" }
 dependencies = [
+  "cffi>=1.12",
   "numpy",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "cffi>=1.12",
   "conda-lock",
   "pytest",
   "pytest-mock",
@@ -59,5 +59,6 @@ pydocstyle.convention = "google"
 [tool.pyright]
 typeCheckingMode = "standard"
 
-[tool.setuptools]
-packages = ["isyntax"]
+[tool.setuptools.packages.find]
+include = ["isyntax", "isyntax.*"]
+namespaces = false
