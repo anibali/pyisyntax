@@ -24,10 +24,6 @@ LIBISYNTAX_FATAL = 1
 LIBISYNTAX_INVALID_ARGUMENT = 2
 
 
-init_python_io_hooks()
-lib.libisyntax_init()
-
-
 class ISyntaxPixelFormat(IntEnum):
     RGBA = lib.LIBISYNTAX_PIXEL_FORMAT_RGBA
     BGRA = lib.LIBISYNTAX_PIXEL_FORMAT_BGRA
@@ -63,7 +59,18 @@ def check_error(status: int) -> None:
     raise LibISyntaxUnknownError
 
 
+def _do_init() -> None:
+    check_error(lib.libisyntax_init())
+    init_python_io_hooks()
+
+
+def init() -> None:
+    ffi.init_once(_do_init, "libisyntax_init")
+
+
 def open_from_registered_handle(handle: int, *, is_init_allocators: bool = False) -> ISyntaxPtr:
+    init()
+
     isyntax = ffi.new("isyntax_t**")
     check_error(lib.libisyntax_open(
         ffi.new("char[]", str(handle).encode("utf-8")),
