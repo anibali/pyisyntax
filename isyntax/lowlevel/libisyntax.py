@@ -8,13 +8,19 @@ from _pyisyntax import ffi, lib
 from isyntax.lowlevel.io_management import init_python_io_hooks, register_io
 
 if TYPE_CHECKING:
+    from collections.abc import Sized
+
     from typing_extensions import Buffer
 
+    class FFIBuffer(Buffer, Sized):
+        pass
 
-ISyntaxPtr = NewType("ISyntaxPtr", object)
-ISyntaxImagePtr = NewType("ISyntaxImagePtr", object)
-ISyntaxLevelPtr = NewType("ISyntaxLevelPtr", object)
-ISyntaxCachePtr = NewType("ISyntaxCachePtr", object)
+
+Pointer = NewType("Pointer", object)
+ISyntaxPtr = NewType("ISyntaxPtr", Pointer)
+ISyntaxImagePtr = NewType("ISyntaxImagePtr", Pointer)
+ISyntaxLevelPtr = NewType("ISyntaxLevelPtr", Pointer)
+ISyntaxCachePtr = NewType("ISyntaxCachePtr", Pointer)
 
 
 LIBISYNTAX_OK = 0
@@ -57,6 +63,10 @@ def check_error(status: int) -> None:
     if status == LIBISYNTAX_INVALID_ARGUMENT:
         raise LibISyntaxInvalidArgumentError
     raise LibISyntaxUnknownError
+
+
+def free(ptr: Pointer) -> None:
+    lib.free(ptr)
 
 
 def _do_init() -> None:
@@ -212,3 +222,29 @@ def read_region(
         ffi.from_buffer("uint32_t[]", pixels_buffer, require_writable=True),
         pixel_format,
     ))
+
+
+def read_label_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
+    jpeg_buffer_ptr = ffi.new("uint8_t**")
+    jpeg_size_ptr = ffi.new("uint32_t*")
+    check_error(lib.libisyntax_read_label_image_jpeg(
+        isyntax,
+        jpeg_buffer_ptr,
+        jpeg_size_ptr,
+    ))
+    jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
+    jpeg_size = jpeg_size_ptr[0]
+    return ffi.buffer(jpeg_buffer, jpeg_size)
+
+
+def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> "FFIBuffer":
+    jpeg_buffer_ptr = ffi.new("uint8_t**")
+    jpeg_size_ptr = ffi.new("uint32_t*")
+    check_error(lib.libisyntax_read_macro_image_jpeg(
+        isyntax,
+        jpeg_buffer_ptr,
+        jpeg_size_ptr,
+    ))
+    jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
+    jpeg_size = jpeg_size_ptr[0]
+    return ffi.buffer(jpeg_buffer, jpeg_size)

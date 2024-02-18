@@ -428,6 +428,19 @@ package:
     sha256: 42717ca3e48c08b3098db01cbb3c04afd5fa67e67bad4691f2b88781269580a7
   category: dev
   optional: true
+- name: pytest-mock
+  version: 3.12.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    pytest: '>=5.0'
+    python: '>=3.8'
+  url: https://conda.anaconda.org/conda-forge/noarch/pytest-mock-3.12.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: ac9fedc9a0c397f2318e82525491dd83
+    sha256: 58d3bd93a0cf9b51ac105de1e01b1fcd1fcfa5993023b67658344e329b02d6e0
+  category: dev
+  optional: true
 - name: python
   version: 3.10.13
   manager: conda

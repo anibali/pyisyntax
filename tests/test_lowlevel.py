@@ -2,6 +2,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from pytest_mock import MockerFixture
 
 from isyntax.lowlevel import libisyntax
 from isyntax.lowlevel.io_management import ByHandleRegistry
@@ -126,6 +127,30 @@ def test_libisyntax_read_region(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCache
     actual = tuple(rgba)
     expected = (226, 226, 229, 255)
     assert actual == expected
+
+
+def test_libisyntax_read_label_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
+    free_spy = mocker.spy(libisyntax, "free")
+    buf = libisyntax.read_label_image_jpeg(isyntax)
+    expected_size = 60348
+    assert len(buf) == expected_size
+    # The underlying allocated memory should be freed
+    # when the buffer object is garbage collected.
+    free_spy.assert_not_called()
+    del buf
+    free_spy.assert_called_once()
+
+
+def test_libisyntax_read_macro_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
+    free_spy = mocker.spy(libisyntax, "free")
+    buf = libisyntax.read_macro_image_jpeg(isyntax)
+    expected_size = 49625
+    assert len(buf) == expected_size
+    # The underlying allocated memory should be freed
+    # when the buffer object is garbage collected.
+    free_spy.assert_not_called()
+    del buf
+    free_spy.assert_called_once()
 
 
 class TestByHandleRegistry:

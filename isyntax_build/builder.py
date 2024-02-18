@@ -52,6 +52,7 @@ def create_ffibuilder() -> FFI:
                 header_lines.append(line)
         header_text = "".join(header_lines)
         header_text += "\n\n" + resources.read_text(isyntax_build, "python_platform_utils.h")
+        header_text += "\n\nvoid free(void *ptr);"
 
         ffibuilder.cdef(header_text)
 
