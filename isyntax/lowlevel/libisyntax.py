@@ -244,3 +244,17 @@ def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
     jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
     jpeg_size = jpeg_size_ptr[0]
     return memoryview(ffi.buffer(jpeg_buffer, jpeg_size))
+
+
+def read_icc_profile(isyntax: ISyntaxPtr, image: ISyntaxImagePtr) -> memoryview:
+    profile_buffer_ptr = ffi.new("uint8_t**")
+    profile_size_ptr = ffi.new("uint32_t*")
+    check_error(lib.libisyntax_read_icc_profile(
+        isyntax,
+        image,
+        profile_buffer_ptr,
+        profile_size_ptr,
+    ))
+    profile_buffer = ffi.gc(profile_buffer_ptr[0], free)
+    profile_size = profile_size_ptr[0]
+    return memoryview(ffi.buffer(profile_buffer, profile_size))
