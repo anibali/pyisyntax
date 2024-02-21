@@ -174,6 +174,14 @@ class ISyntax:
         """
         return libisyntax.read_macro_image_jpeg(self.ptr)
 
+    def read_icc_profile(self, image_index: int) -> memoryview:
+        """Reads the ICC color profile for an image.
+
+        Returns:
+            The ICC color profile.
+        """
+        return libisyntax.read_icc_profile(self.ptr, self.get_image(image_index).ptr)
+
     @property
     def level_count(self) -> int:
         return self.wsi.level_count

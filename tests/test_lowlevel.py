@@ -157,6 +157,22 @@ def test_libisyntax_read_macro_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFix
     free_spy.assert_called_once()
 
 
+def test_libisyntax_read_icc_profile(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
+    free_spy = mocker.spy(libisyntax, "free")
+    wsi_image = libisyntax.get_image(isyntax, 0)
+    buf = libisyntax.read_icc_profile(isyntax, wsi_image)
+    version_major = buf[8]
+    version_minor = buf[9] >> 4
+    assert (version_major, version_minor) == (2, 2)
+    expected_size = 18076
+    assert len(buf) == expected_size
+    # The underlying allocated memory should be freed
+    # when the buffer object is garbage collected.
+    free_spy.assert_not_called()
+    del buf
+    free_spy.assert_called_once()
+
+
 class TestByHandleRegistry:
     def test_handles_holes_correctly(self) -> None:
         registry = ByHandleRegistry[str]()
