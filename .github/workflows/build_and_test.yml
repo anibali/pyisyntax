@@ -9,7 +9,7 @@ defaults:
 jobs:
   build-sdist:
     name: Build source distribution
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,22 +22,22 @@ jobs:
           python -m pip install build
           python -m build --sdist
       - name: Upload source distribution
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sdist-${{ github.sha }}
           path: ./dist/pyisyntax-*.tar.gz
-          retention-days: 7
+          if-no-files-found: error
 
   test-sdist:
     name: Test source distribution
     needs: build-sdist
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Fetch source distribution
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: sdist-${{ github.sha }}
           path: dist/
@@ -53,38 +53,52 @@ jobs:
           pytest tests/
 
   build-wheels:
-    name: Build ${{ matrix.cibw_build }} wheels
+    name: Build ${{ matrix.platform_tag }} wheels
     needs: build-sdist
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          - os: ubuntu-20.04
-            cibw_archs: x86_64
-            cibw_build: "cp3*-manylinux_x86_64"
-            compile_target: x86_64
+          - platform_tag: manylinux_x86_64
+            os: ubuntu-22.04
+          - platform_tag: macosx_x86_64
+            os: macos-13
+          - platform_tag: macosx_arm64
+            os: macos-14
+          - platform_tag: win_amd64
+            os: windows-2022
     steps:
       - name: Fetch source distribution
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: sdist-${{ github.sha }}
           path: dist/
       - run: mv dist/pyisyntax-*.tar.gz pyisyntax.tar.gz
-      - name: Build wheels for ${{ matrix.os }} ${{ matrix.cibw_archs }} ${{ matrix.cibw_build }}
-        uses: pypa/cibuildwheel@v2.15.0
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.16.5
         with:
           package-dir: pyisyntax.tar.gz
           output-dir: dist
         env:
           CIBW_BUILD_FRONTEND: build
-          CIBW_BUILD: ${{ matrix.cibw_build }}
-          CIBW_SKIP: ${{ matrix.cibw_skip }}
-          CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_BUILD: cp3*-${{ matrix.platform_tag }}
           CIBW_PROJECT_REQUIRES_PYTHON: '>=3.10'
           CIBW_TEST_REQUIRES: pytest==8.0.0 pytest-mock==3.12.0
           CIBW_TEST_COMMAND: pytest {package}/tests
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ github.sha }}
+          name: wheels-${{ matrix.platform_tag }}-${{ github.sha }}
           path: ./dist/*.whl
-          retention-days: 7
+          if-no-files-found: error
+
+  merge-artifacts:
+    name: Merge build artifacts
+    runs-on: ubuntu-latest
+    needs:
+      - build-sdist
+      - build-wheels
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: merged-artifacts-${{ github.sha }}

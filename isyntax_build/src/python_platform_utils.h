@@ -1,9 +1,5 @@
-extern "Python" {
-  bool python_file_set_pos(int, int64_t);
-  int64_t python_file_read_into(int, void*, size_t);
-  int64_t python_file_get_size(int);
-  void python_file_close(int);
-}
+#include <stdbool.h>
+#include <stdint.h>
 
 /*
 Registers Python callback functions for handling I/O operations.
