@@ -17,6 +17,7 @@ dev = [
   "pytest",
   "pytest-mock",
   "ruff==0.2.1",
+  "twine",
 ]
 
 [tool.conda-lock]
