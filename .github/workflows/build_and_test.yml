@@ -90,6 +90,7 @@ jobs:
           python-version: "3.10"
       - name: abi3audit
         run: |
+          python -m pip install --upgrade pip
           python -m pip install abi3audit
           python -m abi3audit $(ls ./dist/*.whl) --debug --verbose
       - uses: actions/upload-artifact@v4
