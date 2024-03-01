@@ -17,7 +17,9 @@ dev = [
   "pytest",
   "pytest-mock",
   "ruff==0.2.1",
+  "tox>=4.0",
   "twine",
+  "typing_extensions",
 ]
 
 [tool.conda-lock]
@@ -59,6 +61,31 @@ pydocstyle.convention = "google"
 
 [tool.pyright]
 typeCheckingMode = "standard"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+min_version = 4.0
+env_list = lint, type, py{310,311,312}
+
+[testenv]
+deps =
+  pytest
+  pytest-mock
+commands = pytest {posargs:tests}
+
+[testenv:lint]
+skip_install = true
+deps =
+  ruff==0.2.1
+commands = ruff check {posargs:.}
+
+[testenv:type]
+deps =
+  pyright
+  typing_extensions
+commands = pyright {posargs:isyntax}
+"""
 
 [tool.setuptools.packages.find]
 include = ["isyntax", "isyntax.*"]
