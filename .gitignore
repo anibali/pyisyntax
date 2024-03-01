@@ -19,6 +19,7 @@ core
 /tests/data/testslide.isyntax
 /build/
 /dist/
+/.tox/
 *.egg-info/
 .eggs/
 *.so
