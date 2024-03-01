@@ -1,6 +1,6 @@
 [project]
 name = "pyisyntax"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python bindings for libisyntax"
 readme = { content-type = "text/markdown", file = "README.md" }
 authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
