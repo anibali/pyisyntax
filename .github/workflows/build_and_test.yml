@@ -87,8 +87,8 @@ jobs:
           CIBW_TEST_COMMAND: pytest {package}/tests
       - name: abi3audit
         run: |
-          pip install abi3audit
-          abi3audit $(ls ./dist/*.whl) --debug --verbose
+          python -m pip install abi3audit
+          python -m abi3audit $(ls ./dist/*.whl) --debug --verbose
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.platform_tag }}-${{ github.sha }}
