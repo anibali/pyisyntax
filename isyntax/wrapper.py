@@ -158,29 +158,38 @@ class ISyntax:
             buf.data, libisyntax.ISyntaxPixelFormat.RGBA)
         return buf
 
-    def read_label_image_jpeg(self) -> memoryview:
+    def read_label_image_jpeg(self) -> memoryview | None:
         """Reads the associated label image as a JPEG-compressed image.
 
         Returns:
-            Compressed JPEG image data.
+            Compressed JPEG image data, or None if it can't be read.
         """
-        return libisyntax.read_label_image_jpeg(self.ptr)
+        try:
+            return libisyntax.read_label_image_jpeg(self.ptr)
+        except libisyntax.LibISyntaxFatalError:
+            return None
 
-    def read_macro_image_jpeg(self) -> memoryview:
+    def read_macro_image_jpeg(self) -> memoryview | None:
         """Reads the associated macro image as a JPEG-compressed image.
 
         Returns:
-            Compressed JPEG image data.
+            Compressed JPEG image data, or None if it can't be read.
         """
-        return libisyntax.read_macro_image_jpeg(self.ptr)
+        try:
+            return libisyntax.read_macro_image_jpeg(self.ptr)
+        except libisyntax.LibISyntaxFatalError:
+            return None
 
-    def read_icc_profile(self, image_index: int) -> memoryview:
+    def read_icc_profile(self, image_index: int) -> memoryview | None:
         """Reads the ICC color profile for an image.
 
         Returns:
-            The ICC color profile.
+            The ICC color profile, or None if it can't be read.
         """
-        return libisyntax.read_icc_profile(self.ptr, self.get_image(image_index).ptr)
+        try:
+            return libisyntax.read_icc_profile(self.ptr, self.get_image(image_index).ptr)
+        except libisyntax.LibISyntaxFatalError:
+            return None
 
     @property
     def level_count(self) -> int:
