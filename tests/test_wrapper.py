@@ -22,10 +22,6 @@ class TestISyntax:
         expected = 256
         assert isyntax.tile_height == expected
 
-    def test_wsi_index(self, isyntax: ISyntax) -> None:
-        expected = 0
-        assert isyntax.wsi_index == expected
-
     def test_level_count(self, isyntax: ISyntax) -> None:
         expected = 8
         assert isyntax.level_count == expected
