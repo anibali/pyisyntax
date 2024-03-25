@@ -115,8 +115,10 @@ def get_wsi_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
 def get_label_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
     return lib.libisyntax_get_label_image(isyntax)
 
+
 def get_macro_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
     return lib.libisyntax_get_macro_image(isyntax)
+
 
 def image_get_level_count(wsi_image: ISyntaxImagePtr) -> int:
     return lib.libisyntax_image_get_level_count(wsi_image)
