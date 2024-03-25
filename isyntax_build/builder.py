@@ -43,7 +43,7 @@ def create_ffibuilder() -> FFI:
         libraries = []
 
     ffibuilder.set_source(
-        "_pyisyntax",
+        "pyisyntax._pyisyntax",
         resources.read_text(isyntax_build, "pyisyntax.c"),
         sources=paths_to_strings(
             libisyntax_src/"libisyntax.c",

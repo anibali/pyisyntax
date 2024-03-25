@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from io import BufferedIOBase, RawIOBase
 from typing import Generic, NewType, TypeVar
 
-from _pyisyntax import ffi, lib
+from pyisyntax._pyisyntax import ffi, lib
 
 VoidPtr = NewType("VoidPtr", object)
 T = TypeVar("T")

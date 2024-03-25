@@ -3,7 +3,7 @@ from enum import IntEnum
 from pathlib import Path
 from typing import TYPE_CHECKING, NewType
 
-from _pyisyntax import ffi, lib
+from pyisyntax._pyisyntax import ffi, lib
 
 from isyntax.lowlevel.io_management import init_python_io_hooks, register_io
 
