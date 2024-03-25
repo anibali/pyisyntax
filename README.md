@@ -3,6 +3,12 @@
 A Python library for working with pathology images in the iSyntax file format,
 powered by [libisyntax](https://github.com/amspath/libisyntax).
 
+## Installation
+
+```console
+$ pip install pyisyntax
+```
+
 ## Usage
 
 Read and display a region of the WSI via
