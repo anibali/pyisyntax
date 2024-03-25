@@ -78,18 +78,19 @@ class ISyntaxImage:
 
 
 class ISyntax:
-    def __init__(self, f: RawIOBase | BufferedIOBase, n_bytes: int) -> None:
+    def __init__(self, f: RawIOBase | BufferedIOBase, n_bytes: int, cache_size: int = 2000) -> None:
         self.io_handle = register_io(f, n_bytes)
         self.ptr = libisyntax.open_from_registered_handle(self.io_handle, is_init_allocators=False)
         self.closed = False
+        self._cache_size = cache_size
         self._cache = None
 
     @classmethod
-    def open(cls: type["ISyntax"], filename: str | Path) -> "ISyntax":
+    def open(cls: type["ISyntax"], filename: str | Path, cache_size: int = 2000) -> "ISyntax":
         filename = Path(filename)
         f = filename.open("rb")
         n_bytes = os.fstat(f.fileno()).st_size
-        return cls(f, n_bytes)
+        return cls(f, n_bytes, cache_size)
 
     def close(self) -> None:
         if self.closed:
@@ -111,7 +112,7 @@ class ISyntax:
 
     def get_cache(self) -> ISyntaxCache:
         if self._cache is None:
-            self._cache = ISyntaxCache(cache_size=2000)
+            self._cache = ISyntaxCache(cache_size=self._cache_size)
             self._cache.inject(self)
         return self._cache
 
