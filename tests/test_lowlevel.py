@@ -23,7 +23,7 @@ def isyntax(sample_isyntax_file: Path) -> Iterator[ISyntaxPtr]:
 
 @pytest.fixture()
 def wsi_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
-    return libisyntax.get_image(isyntax, 0)
+    return libisyntax.get_wsi_image(isyntax)
 
 
 @pytest.fixture()
@@ -57,10 +57,6 @@ def test_libisyntax_get_tile_width(isyntax: ISyntaxPtr) -> None:
 def test_libisyntax_get_tile_height(isyntax: ISyntaxPtr) -> None:
     expected = 256
     assert libisyntax.get_tile_height(isyntax) == expected
-
-
-def test_libisyntax_get_wsi_image_index(isyntax: ISyntaxPtr) -> None:
-    assert libisyntax.get_wsi_image_index(isyntax) == 0
 
 
 def test_libisyntax_image_get_level_count(wsi_image: ISyntaxImagePtr) -> None:
@@ -159,7 +155,7 @@ def test_libisyntax_read_macro_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFix
 
 def test_libisyntax_read_icc_profile(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
     free_spy = mocker.spy(libisyntax, "free")
-    wsi_image = libisyntax.get_image(isyntax, 0)
+    wsi_image = libisyntax.get_wsi_image(isyntax)
     buf = libisyntax.read_icc_profile(isyntax, wsi_image)
     version_major = buf[8]
     version_minor = buf[9] >> 4

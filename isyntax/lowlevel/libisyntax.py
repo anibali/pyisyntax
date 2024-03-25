@@ -108,13 +108,15 @@ def get_tile_height(isyntax: ISyntaxPtr) -> int:
     return lib.libisyntax_get_tile_height(isyntax)
 
 
-def get_wsi_image_index(isyntax: ISyntaxPtr) -> int:
-    return lib.libisyntax_get_wsi_image_index(isyntax)
+def get_wsi_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
+    return lib.libisyntax_get_wsi_image(isyntax)
 
 
-def get_image(isyntax: ISyntaxPtr, wsi_image_index: int) -> ISyntaxImagePtr:
-    return lib.libisyntax_get_image(isyntax, wsi_image_index)
+def get_label_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
+    return lib.libisyntax_get_label_image(isyntax)
 
+def get_macro_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
+    return lib.libisyntax_get_macro_image(isyntax)
 
 def image_get_level_count(wsi_image: ISyntaxImagePtr) -> int:
     return lib.libisyntax_image_get_level_count(wsi_image)

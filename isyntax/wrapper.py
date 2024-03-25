@@ -106,15 +106,8 @@ class ISyntax:
         return libisyntax.get_tile_height(self.ptr)
 
     @property
-    def wsi_index(self) -> int:
-        return libisyntax.get_wsi_image_index(self.ptr)
-
-    def get_image(self, image_index: int) -> ISyntaxImage:
-        return ISyntaxImage(libisyntax.get_image(self.ptr, image_index))
-
-    @property
     def wsi(self) -> ISyntaxImage:
-        return self.get_image(self.wsi_index)
+        return ISyntaxImage(libisyntax.get_wsi_image(self.ptr))
 
     def get_cache(self) -> ISyntaxCache:
         if self._cache is None:
@@ -180,14 +173,14 @@ class ISyntax:
         except libisyntax.LibISyntaxFatalError:
             return None
 
-    def read_icc_profile(self, image_index: int) -> memoryview | None:
+    def read_icc_profile(self) -> memoryview | None:
         """Reads the ICC color profile for an image.
 
         Returns:
             The ICC color profile, or None if it can't be read.
         """
         try:
-            return libisyntax.read_icc_profile(self.ptr, self.get_image(image_index).ptr)
+            return libisyntax.read_icc_profile(self.ptr, self.wsi.ptr)
         except libisyntax.LibISyntaxFatalError:
             return None
 
