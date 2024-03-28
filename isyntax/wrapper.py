@@ -96,6 +96,7 @@ class ISyntax:
         if self.closed:
             return
         libisyntax.close(self.ptr)
+        self._cache = None
         self.closed = True
 
     @property

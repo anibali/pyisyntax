@@ -1,3 +1,4 @@
+import gc
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -109,3 +110,17 @@ class TestISyntax:
         free_spy.assert_not_called()
         del jpeg_data
         free_spy.assert_called_once()
+
+    def test_close_is_idempotent(self, isyntax: ISyntax) -> None:
+        isyntax.close()
+        isyntax.close()
+        assert isyntax.closed
+
+    def test_cache_is_destroyed_on_close(self, isyntax: ISyntax, mocker: MockerFixture) -> None:
+        destroy_spy = mocker.spy(libisyntax, "cache_destroy")
+        # Reading image data causes the cache to be created.
+        isyntax.read_region(500, 500, 1, 1, level=4)
+        destroy_spy.assert_not_called()
+        isyntax.close()
+        gc.collect()
+        destroy_spy.assert_called_once()
