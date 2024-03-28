@@ -85,6 +85,7 @@ class TestISyntax:
     def test_read_label_image_jpeg(self, isyntax: ISyntax, mocker: MockerFixture) -> None:
         free_spy = mocker.spy(libisyntax, "free")
         jpeg_data = isyntax.read_label_image_jpeg()
+        assert jpeg_data is not None
         jpeg_magic = b"\xff\xd8"
         assert jpeg_data[:2] == jpeg_magic
         expected_size = 60348
@@ -98,6 +99,7 @@ class TestISyntax:
     def test_read_macro_image_jpeg(self, isyntax: ISyntax, mocker: MockerFixture) -> None:
         free_spy = mocker.spy(libisyntax, "free")
         jpeg_data = isyntax.read_macro_image_jpeg()
+        assert jpeg_data is not None
         jpeg_magic = b"\xff\xd8"
         assert jpeg_data[:2] == jpeg_magic
         expected_size = 49625
