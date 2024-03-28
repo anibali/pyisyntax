@@ -1,4 +1,5 @@
 import gc
+import io
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -124,3 +125,8 @@ class TestISyntax:
         isyntax.close()
         gc.collect()
         destroy_spy.assert_called_once()
+
+    def test_closes_after_error_from_contextmanager(self) -> None:
+        f = io.BytesIO()
+        with pytest.raises(libisyntax.LibISyntaxFatalError), ISyntax(f, 0):
+            pass

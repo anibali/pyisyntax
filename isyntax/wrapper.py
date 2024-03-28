@@ -79,6 +79,9 @@ class ISyntaxImage:
 
 class ISyntax:
     def __init__(self, f: RawIOBase | BufferedIOBase, n_bytes: int, cache_size: int = 2000) -> None:
+        # Start in the "closed" for a graceful contextmanager exit when the file
+        # fails to open.
+        self.closed = True
         self.io_handle = register_io(f, n_bytes)
         self.ptr = libisyntax.open_from_registered_handle(self.io_handle, is_init_allocators=False)
         self.closed = False

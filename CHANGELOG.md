@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - This CHANGELOG file.
 
+### Fixed
+
+- Gracefully exit the contextmanager when an ISyntax file fails to open
+  ([#8](https://github.com/anibali/pyisyntax/issues/8)).
+- Release reference to the associated cache object when an ISyntax object is closed
+  so that it can be garbage collected and destroyed
+  ([#9](https://github.com/anibali/pyisyntax/issues/9)).
+
 ## [0.1.2] - 2024-03-25
 
 ### Added
