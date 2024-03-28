@@ -1,5 +1,6 @@
 include README.md
 include LICENSE
+include CHANGELOG.md
 
 graft isyntax_build
 prune isyntax_build/vendor/libisyntax

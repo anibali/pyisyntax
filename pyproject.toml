@@ -11,6 +11,13 @@ dependencies = [
   "numpy",
 ]
 
+[project.urls]
+homepage = "https://github.com/anibali/pyisyntax"
+source = "https://github.com/anibali/pyisyntax"
+download = "https://pypi.org/project/pyisyntax/#files"
+tracker = "https://github.com/anibali/pyisyntax/issues"
+"release notes" = "https://github.com/anibali/pyisyntax/blob/master/CHANGELOG.md"
+
 [project.optional-dependencies]
 dev = [
   "conda-lock",
