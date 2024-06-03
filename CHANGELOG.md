@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump the `libisyntax` submodule commit.
+
 ## [0.1.3] - 2024-03-28
 
 ### Added
