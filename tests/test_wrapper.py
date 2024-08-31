@@ -24,6 +24,10 @@ class TestISyntax:
         expected = 256
         assert isyntax.tile_height == expected
 
+    def test_barcode(self, isyntax: ISyntax) -> None:
+        expected = "             "
+        assert isyntax.barcode == expected
+
     def test_level_count(self, isyntax: ISyntax) -> None:
         expected = 8
         assert isyntax.level_count == expected

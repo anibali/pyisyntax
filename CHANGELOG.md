@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for reading the slide barcode. The barcode string can be accessed via
+  the `barcode` property of an `ISyntax` instance.
+
 ### Changed
 
 - Bump the `libisyntax` submodule commit.

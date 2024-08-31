@@ -153,6 +153,11 @@ def test_libisyntax_read_macro_image_jpeg(isyntax: ISyntaxPtr, mocker: MockerFix
     free_spy.assert_called_once()
 
 
+def test_libisyntax_get_barcode(isyntax: ISyntaxPtr) -> None:
+    expected = b"             "
+    assert libisyntax.get_barcode(isyntax) == expected
+
+
 def test_libisyntax_read_icc_profile(isyntax: ISyntaxPtr, mocker: MockerFixture) -> None:
     free_spy = mocker.spy(libisyntax, "free")
     wsi_image = libisyntax.get_wsi_image(isyntax)

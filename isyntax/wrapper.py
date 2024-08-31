@@ -178,6 +178,10 @@ class ISyntax:
         except libisyntax.LibISyntaxFatalError:
             return None
 
+    @property
+    def barcode(self) -> str:
+        return libisyntax.get_barcode(self.ptr).decode("ascii")
+
     def read_icc_profile(self) -> memoryview | None:
         """Reads the ICC color profile for an image.
 

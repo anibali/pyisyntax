@@ -119,6 +119,10 @@ def get_macro_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
     return lib.libisyntax_get_macro_image(isyntax)
 
 
+def get_barcode(isyntax: ISyntaxPtr) -> bytes:
+    return ffi.string(lib.libisyntax_get_barcode(isyntax))
+
+
 def image_get_level_count(wsi_image: ISyntaxImagePtr) -> int:
     return lib.libisyntax_image_get_level_count(wsi_image)
 
