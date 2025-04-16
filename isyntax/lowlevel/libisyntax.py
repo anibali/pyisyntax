@@ -131,6 +131,14 @@ def image_get_level(wsi_image: ISyntaxImagePtr, index: int) -> ISyntaxLevelPtr:
     return lib.libisyntax_image_get_level(wsi_image, index)
 
 
+def image_get_offset_x(wsi_image: ISyntaxImagePtr) -> int:
+    return lib.libisyntax_image_get_offset_x(wsi_image)
+
+
+def image_get_offset_y(wsi_image: ISyntaxImagePtr) -> int:
+    return lib.libisyntax_image_get_offset_y(wsi_image)
+
+
 def level_get_scale(level: ISyntaxLevelPtr) -> int:
     return lib.libisyntax_level_get_scale(level)
 
