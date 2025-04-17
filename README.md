@@ -48,22 +48,16 @@ with ISyntax.open("my_file.isyntax") as isyntax:
 
 To set up a development environment from the lock file:
 
-1. Ensure that you have
-   [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html)
-   installed.
-2. Create the environment:
+1. Ensure that you have [uv](https://docs.astral.sh/uv/) installed.
+2. Create the virtual environment:
    ```console
-   $ micromamba create -n pyisyntax -f conda-lock.yml --category main --category dev
-   ```
-3. Activate the environment:
-   ```console
-   $ micromamba activate pyisyntax
+   $ uv sync --frozen
    ```
 
 To modify pyisyntax project dependencies:
 
-1. Edit pyproject.toml.
-2. Update the lock file using conda-lock:
+1. Edit dependencies in `pyproject.toml`.
+2. Update the lock file using uv:
    ```console
-   $ conda-lock lock -f pyproject.toml -p linux-64 --micromamba
+   $ uv lock
    ```

@@ -5,7 +5,7 @@ description = "Python bindings for libisyntax"
 readme = { content-type = "text/markdown", file = "README.md" }
 authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = "MIT"
 dependencies = [
   "cffi>=1.12",
   "numpy",
@@ -18,25 +18,18 @@ Download = "https://pypi.org/project/pyisyntax/#files"
 Tracker = "https://github.com/anibali/pyisyntax/issues"
 "Release notes" = "https://github.com/anibali/pyisyntax/blob/master/CHANGELOG.md"
 
-[project.optional-dependencies]
-dev = [
-  "conda-lock",
+[tool.uv]
+dev-dependencies = [
+  "mypy>=1.15.0",
   "pytest",
   "pytest-mock",
   "ruff==0.2.1",
   "tox>=4.0",
+  "tox-uv",
   "twine",
-  # "types-cffi",
+  "types-cffi",
   "typing_extensions",
 ]
-
-[tool.conda-lock]
-channels = [
-  "conda-forge",
-]
-
-[tool.conda-lock.dependencies]
-python = "3.10.*"
 
 [build-system]
 requires = [
@@ -83,7 +76,7 @@ disable_error_code = ["import-untyped"]
 legacy_tox_ini = """
 [tox]
 min_version = 4.0
-env_list = lint, type, py{310,311,312}
+env_list = ruff, pyright, mypy, py{310,311,312}
 
 [testenv]
 deps =
@@ -91,17 +84,30 @@ deps =
   pytest-mock
 commands = pytest --import-mode=importlib {posargs:tests}
 
-[testenv:lint]
+[testenv:ruff]
 skip_install = true
 deps =
   ruff==0.2.1
 commands = ruff check {posargs:.}
 
-[testenv:type]
+[testenv:ruff-format]
+skip_install = true
+deps =
+  ruff==0.2.1
+commands = ruff format --check {posargs:.}
+
+[testenv:pyright]
 deps =
   pyright
   typing_extensions
 commands = pyright {posargs:isyntax}
+
+[testenv:mypy]
+deps =
+  mypy==1.15.0
+  types-cffi
+  typing_extensions
+commands = mypy {posargs:isyntax}
 """
 
 [tool.setuptools.packages.find]
