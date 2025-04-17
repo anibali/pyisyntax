@@ -96,7 +96,7 @@ class ISyntax:
         self.ptr = libisyntax.open_from_registered_handle(self.io_handle, is_init_allocators=False)
         self.closed = False
         self._cache_size = cache_size
-        self._cache = None
+        self._cache: ISyntaxCache | None = None
 
     @classmethod
     def open(cls: type["ISyntax"], filename: str | Path, cache_size: int = 2000) -> "ISyntax":
@@ -143,8 +143,15 @@ class ISyntax:
         """
         cache = self.get_cache()
         buf = np.empty((self.tile_height, self.tile_width, 4), dtype=np.uint8)
-        libisyntax.tile_read(self.ptr, cache.ptr, level, tile_x, tile_y,
-            buf.data, libisyntax.ISyntaxPixelFormat.RGBA)
+        libisyntax.tile_read(
+            self.ptr,
+            cache.ptr,
+            level,
+            tile_x,
+            tile_y,
+            buf.data,
+            libisyntax.ISyntaxPixelFormat.RGBA,
+        )
         return buf
 
     def read_region(self, x: int, y: int, width: int, height: int, level: int = 0) -> np.ndarray:
@@ -162,8 +169,17 @@ class ISyntax:
         """
         cache = self.get_cache()
         buf = np.empty((height, width, 4), dtype=np.uint8)
-        libisyntax.read_region(self.ptr, cache.ptr, level, x, y, width, height,
-            buf.data, libisyntax.ISyntaxPixelFormat.RGBA)
+        libisyntax.read_region(
+            self.ptr,
+            cache.ptr,
+            level,
+            x,
+            y,
+            width,
+            height,
+            buf.data,
+            libisyntax.ISyntaxPixelFormat.RGBA,
+        )
         return buf
 
     def read_label_image_jpeg(self) -> memoryview | None:

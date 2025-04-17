@@ -77,11 +77,13 @@ def open_from_registered_handle(handle: int, *, is_init_allocators: bool = False
     init()
 
     isyntax = ffi.new("isyntax_t**")
-    check_error(lib.libisyntax_open(
-        ffi.new("char[]", str(handle).encode("utf-8")),
-        is_init_allocators,
-        isyntax,
-    ))
+    check_error(
+        lib.libisyntax_open(
+            ffi.new("char[]", str(handle).encode("utf-8")),
+            is_init_allocators,
+            isyntax,
+        ),
+    )
     return isyntax[0]
 
 
@@ -173,11 +175,13 @@ def cache_create(debug_name: str | None, cache_size: int) -> ISyntaxCachePtr:
         debug_name_or_null = ffi.NULL
     else:
         debug_name_or_null = ffi.new("char[]", debug_name.encode("utf-8"))
-    check_error(lib.libisyntax_cache_create(
-        debug_name_or_null,
-        cache_size,
-        isyntax_cache,
-    ))
+    check_error(
+        lib.libisyntax_cache_create(
+            debug_name_or_null,
+            cache_size,
+            isyntax_cache,
+        ),
+    )
     return isyntax_cache[0]
 
 
@@ -200,15 +204,17 @@ def tile_read(
     pixels_buffer: "Buffer | FFI.buffer",
     pixel_format: ISyntaxPixelFormat,
 ) -> None:
-    check_error(lib.libisyntax_tile_read(
-        isyntax,
-        isyntax_cache,
-        level,
-        tile_x,
-        tile_y,
-        ffi.from_buffer("uint32_t[]", pixels_buffer, require_writable=True),
-        pixel_format,
-    ))
+    check_error(
+        lib.libisyntax_tile_read(
+            isyntax,
+            isyntax_cache,
+            level,
+            tile_x,
+            tile_y,
+            ffi.from_buffer("uint32_t[]", pixels_buffer, require_writable=True),
+            pixel_format,
+        ),
+    )
 
 
 def read_region(
@@ -222,27 +228,31 @@ def read_region(
     pixels_buffer: "Buffer | FFI.buffer",
     pixel_format: ISyntaxPixelFormat,
 ) -> None:
-    check_error(lib.libisyntax_read_region(
-        isyntax,
-        isyntax_cache,
-        level,
-        x,
-        y,
-        width,
-        height,
-        ffi.from_buffer("uint32_t[]", pixels_buffer, require_writable=True),
-        pixel_format,
-    ))
+    check_error(
+        lib.libisyntax_read_region(
+            isyntax,
+            isyntax_cache,
+            level,
+            x,
+            y,
+            width,
+            height,
+            ffi.from_buffer("uint32_t[]", pixels_buffer, require_writable=True),
+            pixel_format,
+        ),
+    )
 
 
 def read_label_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
     jpeg_buffer_ptr = ffi.new("uint8_t**")
     jpeg_size_ptr = ffi.new("uint32_t*")
-    check_error(lib.libisyntax_read_label_image_jpeg(
-        isyntax,
-        jpeg_buffer_ptr,
-        jpeg_size_ptr,
-    ))
+    check_error(
+        lib.libisyntax_read_label_image_jpeg(
+            isyntax,
+            jpeg_buffer_ptr,
+            jpeg_size_ptr,
+        ),
+    )
     jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
     jpeg_size = jpeg_size_ptr[0]
     return memoryview(ffi.buffer(jpeg_buffer, jpeg_size))
@@ -251,11 +261,13 @@ def read_label_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
 def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
     jpeg_buffer_ptr = ffi.new("uint8_t**")
     jpeg_size_ptr = ffi.new("uint32_t*")
-    check_error(lib.libisyntax_read_macro_image_jpeg(
-        isyntax,
-        jpeg_buffer_ptr,
-        jpeg_size_ptr,
-    ))
+    check_error(
+        lib.libisyntax_read_macro_image_jpeg(
+            isyntax,
+            jpeg_buffer_ptr,
+            jpeg_size_ptr,
+        ),
+    )
     jpeg_buffer = ffi.gc(jpeg_buffer_ptr[0], free)
     jpeg_size = jpeg_size_ptr[0]
     return memoryview(ffi.buffer(jpeg_buffer, jpeg_size))
@@ -264,12 +276,14 @@ def read_macro_image_jpeg(isyntax: ISyntaxPtr) -> memoryview:
 def read_icc_profile(isyntax: ISyntaxPtr, image: ISyntaxImagePtr) -> memoryview:
     profile_buffer_ptr = ffi.new("uint8_t**")
     profile_size_ptr = ffi.new("uint32_t*")
-    check_error(lib.libisyntax_read_icc_profile(
-        isyntax,
-        image,
-        profile_buffer_ptr,
-        profile_size_ptr,
-    ))
+    check_error(
+        lib.libisyntax_read_icc_profile(
+            isyntax,
+            image,
+            profile_buffer_ptr,
+            profile_size_ptr,
+        ),
+    )
     profile_buffer = ffi.gc(profile_buffer_ptr[0], free)
     profile_size = profile_size_ptr[0]
     return memoryview(ffi.buffer(profile_buffer, profile_size))

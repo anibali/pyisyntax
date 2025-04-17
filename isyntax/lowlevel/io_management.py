@@ -27,12 +27,15 @@ class ByHandleRegistry(Generic[T]):
         Handles start at 1, autoincrement, and will automatically be recycled
         once objects are removed from the registry.
         """
-        self._list = []
+        self._list: list[T | ByHandleRegistry._EmptySlot] = []
         self._n_free = 0
         self._empty_slot = self._EmptySlot()
 
     def pop(self, handle: int) -> T:
         element = self._list[handle - 1]
+        if isinstance(element, ByHandleRegistry._EmptySlot):
+            msg = "empty slot"
+            raise IndexError(msg)
         self._list[handle - 1] = self._empty_slot
         self._n_free += 1
         if len(self._list) == handle:
@@ -52,11 +55,15 @@ class ByHandleRegistry(Generic[T]):
         return index + 1
 
     def __getitem__(self, handle: int) -> T:
-        return self._list[handle - 1]
+        element = self._list[handle - 1]
+        if isinstance(element, ByHandleRegistry._EmptySlot):
+            msg = "empty slot"
+            raise IndexError(msg)
+        return element
 
     def items(self) -> Iterator[tuple[int, T]]:
         for i, element in enumerate(self._list):
-            if element is not self._empty_slot:
+            if not isinstance(element, ByHandleRegistry._EmptySlot):
                 yield i + 1, element
 
 
@@ -69,7 +76,6 @@ def init_python_io_hooks() -> None:
         _io_registry[handle].f.seek(offset)
         return True
 
-
     @ffi.def_extern()
     def python_file_read_into(handle: int, dest: VoidPtr, bytes_to_read: int) -> int:
         bytes_read = _io_registry[handle].f.readinto(ffi.buffer(dest, bytes_to_read))
@@ -77,16 +83,13 @@ def init_python_io_hooks() -> None:
             raise RuntimeError
         return max(bytes_read, 1)
 
-
     @ffi.def_extern()
     def python_file_get_size(handle: int) -> int:
         return _io_registry[handle].n_bytes
 
-
     @ffi.def_extern()
     def python_file_close(handle: int) -> None:
         _io_registry.pop(handle).f.close()
-
 
     lib.init_python_platform_utils(
         lib.python_file_set_pos,
@@ -109,7 +112,7 @@ def register_io(f: RawIOBase | BufferedIOBase, n_bytes: int) -> int:
     Returns:
         New handle assigned to the IO object.
     """
-    if not f.readable:
+    if not f.readable():
         msg = "IO object must be readable"
         raise RuntimeError(msg)
     return _io_registry.add(SizedIO(f, n_bytes))
