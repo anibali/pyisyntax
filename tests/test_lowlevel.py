@@ -64,6 +64,16 @@ def test_libisyntax_image_get_level_count(wsi_image: ISyntaxImagePtr) -> None:
     assert libisyntax.image_get_level_count(wsi_image) == expected
 
 
+def test_libisyntax_image_get_offset_x(wsi_image: ISyntaxImagePtr) -> None:
+    expected = 13531
+    assert libisyntax.image_get_offset_x(wsi_image) == expected
+
+
+def test_libisyntax_image_get_offset_y(wsi_image: ISyntaxImagePtr) -> None:
+    expected = 22053
+    assert libisyntax.image_get_offset_y(wsi_image) == expected
+
+
 def test_libisyntax_level_get_scale(level4: ISyntaxLevelPtr) -> None:
     expected = 4
     assert libisyntax.level_get_scale(level4) == expected

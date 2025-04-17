@@ -74,6 +74,14 @@ class TestISyntax:
         expected = 0.25
         assert isyntax.mpp_y == expected
 
+    def test_offset_x(self, isyntax: ISyntax) -> None:
+        expected = 13531
+        assert isyntax.offset_x == expected
+
+    def test_offset_y(self, isyntax: ISyntax) -> None:
+        expected = 22053
+        assert isyntax.offset_y == expected
+
     def test_read_tile(self, isyntax: ISyntax) -> None:
         rgba = isyntax.read_tile(0, 0, level=7)
         x = 97

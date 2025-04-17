@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Properties `offset_x`and `offset_y` for the WSI image offset in relation to the macro image.
+
+### Changed
+
+- Bump the `libisyntax` submodule commit.
+
 ## [0.1.4] - 2024-08-31
 
 ### Added

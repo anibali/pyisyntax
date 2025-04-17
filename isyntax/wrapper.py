@@ -224,6 +224,18 @@ class ISyntax:
         level0 = self.wsi.get_level(0)
         return level0.mpp_y
 
+    @property
+    def offset_x(self) -> int:
+        """X-offset in pixels of the WSI image origin from the macro image origin."""
+        image = libisyntax.get_wsi_image(self.ptr)
+        return libisyntax.image_get_offset_x(image)
+
+    @property
+    def offset_y(self) -> int:
+        """Y-offset in pixels of the WSI image origin from the macro image origin."""
+        image = libisyntax.get_wsi_image(self.ptr)
+        return libisyntax.image_get_offset_y(image)
+
     def __enter__(self) -> "ISyntax":
         return self
 
