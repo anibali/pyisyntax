@@ -117,11 +117,18 @@ def test_libisyntax_cache_create_destroy() -> None:
 def test_libisyntax_tile_read(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCachePtr) -> None:
     rgba = bytearray(256 * 256 * 4)
     libisyntax.tile_read(
-        isyntax, isyntax_cache, 7, 0, 0, rgba, libisyntax.ISyntaxPixelFormat.RGBA)
+        isyntax,
+        isyntax_cache,
+        7,
+        0,
+        0,
+        rgba,
+        libisyntax.ISyntaxPixelFormat.RGBA,
+    )
     x = 97
     y = 45
     pos = 256 * 4 * y + 4 * x
-    actual = tuple(rgba[pos:pos + 4])
+    actual = tuple(rgba[pos : pos + 4])
     expected = (145, 108, 87, 255)
     assert actual == expected
 
@@ -129,7 +136,16 @@ def test_libisyntax_tile_read(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCachePt
 def test_libisyntax_read_region(isyntax: ISyntaxPtr, isyntax_cache: ISyntaxCachePtr) -> None:
     rgba = bytearray(4)
     libisyntax.read_region(
-        isyntax, isyntax_cache, 4, 500, 500, 1, 1, rgba, libisyntax.ISyntaxPixelFormat.RGBA)
+        isyntax,
+        isyntax_cache,
+        4,
+        500,
+        500,
+        1,
+        1,
+        rgba,
+        libisyntax.ISyntaxPixelFormat.RGBA,
+    )
     actual = tuple(rgba)
     expected = (226, 226, 229, 255)
     assert actual == expected
