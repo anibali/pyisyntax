@@ -76,6 +76,16 @@ class ISyntaxImage:
         for i in range(self.level_count):
             yield self.get_level(i)
 
+    @property
+    def offset_x(self) -> int:
+        """X-offset in pixels of the WSI image origin from the macro image origin."""
+        return libisyntax.image_get_offset_x(self.ptr)
+
+    @property
+    def offset_y(self) -> int:
+        """Y-offset in pixels of the WSI image origin from the macro image origin."""
+        return libisyntax.image_get_offset_y(self.ptr)
+
 
 class ISyntax:
     def __init__(self, f: RawIOBase | BufferedIOBase, n_bytes: int, cache_size: int = 2000) -> None:
@@ -227,14 +237,12 @@ class ISyntax:
     @property
     def offset_x(self) -> int:
         """X-offset in pixels of the WSI image origin from the macro image origin."""
-        image = libisyntax.get_wsi_image(self.ptr)
-        return libisyntax.image_get_offset_x(image)
+        return self.wsi.offset_x
 
     @property
     def offset_y(self) -> int:
         """Y-offset in pixels of the WSI image origin from the macro image origin."""
-        image = libisyntax.get_wsi_image(self.ptr)
-        return libisyntax.image_get_offset_y(image)
+        return self.wsi.offset_y
 
     def __enter__(self) -> "ISyntax":
         return self
