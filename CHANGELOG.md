@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2025-04-18
+
 ### Added
 
 - Properties `offset_x`and `offset_y` for the WSI image offset in relation to the macro image.
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump the `libisyntax` submodule commit.
+- Use `uv` for development environment management (was previously `conda-lock`).
 
 ## [0.1.4] - 2024-08-31
 
@@ -69,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - This is the initial release.
 
-[unreleased]: https://github.com/anibali/pyisyntax/compare/v0.1.4...HEAD
+[unreleased]: https://github.com/anibali/pyisyntax/compare/v0.1.5...HEAD
+[0.1.4]: https://github.com/anibali/pyisyntax/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/anibali/pyisyntax/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/anibali/pyisyntax/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/anibali/pyisyntax/compare/v0.1.1...v0.1.2
