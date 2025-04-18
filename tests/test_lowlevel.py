@@ -14,24 +14,24 @@ from isyntax.lowlevel.libisyntax import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def isyntax(sample_isyntax_file: Path) -> Iterator[ISyntaxPtr]:
     isyntax = libisyntax.open_from_filename(sample_isyntax_file)
     yield isyntax
     libisyntax.close(isyntax)
 
 
-@pytest.fixture()
+@pytest.fixture
 def wsi_image(isyntax: ISyntaxPtr) -> ISyntaxImagePtr:
     return libisyntax.get_wsi_image(isyntax)
 
 
-@pytest.fixture()
+@pytest.fixture
 def level4(wsi_image: ISyntaxImagePtr) -> ISyntaxLevelPtr:
     return libisyntax.image_get_level(wsi_image, 4)
 
 
-@pytest.fixture()
+@pytest.fixture
 def isyntax_cache(isyntax: ISyntaxPtr) -> Iterator[ISyntaxCachePtr]:
     isyntax_cache = libisyntax.cache_create("fixture_cache", 2000)
     libisyntax.cache_inject(isyntax_cache, isyntax)

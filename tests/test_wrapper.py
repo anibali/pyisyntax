@@ -11,7 +11,7 @@ from isyntax.wrapper import ISyntax
 
 
 class TestISyntax:
-    @pytest.fixture()
+    @pytest.fixture
     def isyntax(self, sample_isyntax_file: Path) -> Iterator[ISyntax]:
         with ISyntax.open(sample_isyntax_file) as isyntax:
             yield isyntax

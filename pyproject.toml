@@ -3,10 +3,9 @@ name = "pyisyntax"
 version = "0.1.4"
 description = "Python bindings for libisyntax"
 readme = { content-type = "text/markdown", file = "README.md" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
-classifiers = [
-  "License Expression :: MIT",
-]
 requires-python = ">=3.10"
 dependencies = [
   "cffi>=1.12",
@@ -25,7 +24,7 @@ dev-dependencies = [
   "mypy>=1.15.0",
   "pytest",
   "pytest-mock",
-  "ruff==0.2.1",
+  "ruff==0.11.6",
   "tox>=4.0",
   "tox-uv",
   "twine",
@@ -36,7 +35,7 @@ dev-dependencies = [
 [build-system]
 requires = [
     "cffi>=1.12",
-    "setuptools>=45",
+    "setuptools>=77",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
@@ -54,7 +53,6 @@ select = ["ALL"]
 ignore = [
   "D1",  # undocumented-
   "PLR0913",  # too-many-arguments
-  "ANN101",  # missing-type-self
   "TRY003",  # raise-vanilla-args
 ]
 pydocstyle.convention = "google"
@@ -89,13 +87,13 @@ commands = pytest --import-mode=importlib {posargs:tests}
 [testenv:ruff]
 skip_install = true
 deps =
-  ruff==0.2.1
+  ruff==0.11.6
 commands = ruff check {posargs:.}
 
 [testenv:ruff-format]
 skip_install = true
 deps =
-  ruff==0.2.1
+  ruff==0.11.6
 commands = ruff format --check {posargs:.}
 
 [testenv:pyright]

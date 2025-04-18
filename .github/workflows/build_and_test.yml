@@ -75,7 +75,7 @@ jobs:
           path: dist/
       - run: mv dist/pyisyntax-*.tar.gz pyisyntax.tar.gz
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
+        uses: pypa/cibuildwheel@v2.23.2
         with:
           package-dir: pyisyntax.tar.gz
           output-dir: dist
