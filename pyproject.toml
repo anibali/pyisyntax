@@ -3,9 +3,12 @@ name = "pyisyntax"
 version = "0.1.4"
 description = "Python bindings for libisyntax"
 readme = { content-type = "text/markdown", file = "README.md" }
+license-files = [ "LICENSE" ]
 authors = [{ name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }]
+classifiers = [
+  "License Expression :: MIT",
+]
 requires-python = ">=3.10"
-license = "MIT"
 dependencies = [
   "cffi>=1.12",
   "numpy",
