@@ -69,8 +69,11 @@ jobs:
             cibw_archs: AMD64
             cibw_build: "cp310-win_amd64"
           - os: macos-14
-            cibw_archs: universal2
-            cibw_build: "cp310-macosx_universal2"
+            cibw_archs: arm64
+            cibw_build: "cp310-macosx_arm64"
+          - os: macos-15-intel
+            cibw_archs: x86_64
+            cibw_build: "cp310-macosx_x86_64"
     steps:
       - name: Fetch source distribution
         uses: actions/download-artifact@v8
