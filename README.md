@@ -61,3 +61,21 @@ To modify pyisyntax project dependencies:
    ```console
    $ uv lock
    ```
+
+### Cutting a new release
+
+1. Ensure that tests are passing and everything is ready for release.
+2. Create and push a Git tag:
+   ```console
+   $ git tag v0.1.6
+   $ git push --tags
+   ```
+3. Download the artifacts from GitHub Actions, which will include the source distribution tarball and binary wheels.
+4. Create a new release on GitHub from the tagged commit and upload the packages as attachments to the release.
+5. Also upload the packages to PyPI using Twine:
+   ```console
+   $ uv run twine upload pyisyntax-*.tar.gz pyisyntax-*.whl
+   ```
+6. Bump the version number in `pyproject.toml` and create a commit, signalling the start of development on the next version.
+
+These files should also be added to a GitHub release.
