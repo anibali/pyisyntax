@@ -19,24 +19,25 @@ Download = "https://pypi.org/project/pyisyntax/#files"
 Tracker = "https://github.com/anibali/pyisyntax/issues"
 "Release notes" = "https://github.com/anibali/pyisyntax/blob/master/CHANGELOG.md"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "mypy>=1.15.0",
-  "pytest",
+  "pytest>=9.0.0",
   "pytest-mock",
   "ruff==0.11.6",
   "tox>=4.0",
   "tox-uv",
   "twine",
+  "ty>=0.0.63",
   "types-cffi",
   "typing_extensions",
 ]
 
 [build-system]
 requires = [
-    "cffi>=1.12",
-    "setuptools>=77",
-    "wheel",
+  "cffi>=1.12",
+  "setuptools>=77",
+  "wheel",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -70,7 +71,12 @@ typeCheckingMode = "standard"
 addopts = "-Werror"
 
 [tool.mypy]
-disable_error_code = ["import-untyped"]
+files = ["isyntax", "isyntax_build", "tests"]
+exclude = ["^isyntax_build/vendor/"]
+
+[tool.ty.src]
+include = ["isyntax", "isyntax_build", "tests"]
+exclude = ["isyntax_build/vendor"]
 
 [tool.tox]
 legacy_tox_ini = """
