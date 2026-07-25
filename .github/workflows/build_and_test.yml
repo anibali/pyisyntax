@@ -107,18 +107,6 @@ jobs:
           python -m abi3audit $(ls ./dist/*.whl) --debug --verbose
       - uses: actions/upload-artifact@v7
         with:
-          name: wheels-${{ matrix.platform_tag }}-${{ github.sha }}
+          name: wheels-${{ github.sha }}
           path: ./dist/*.whl
-          if-no-files-found: error
-
-  merge-artifacts:
-    name: Merge build artifacts
-    runs-on: ubuntu-latest
-    needs:
-      - build-sdist
-      - build-wheels
-    steps:
-      - name: Merge artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: merged-artifacts-${{ github.sha }}
+          retention-days: 7
