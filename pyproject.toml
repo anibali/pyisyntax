@@ -52,6 +52,7 @@ exclude = [
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+  "COM812", # missing-trailing-comma, conflicts with ruff format
   "D1",  # undocumented-
   "PLR0913",  # too-many-arguments
   "TRY003",  # raise-vanilla-args
