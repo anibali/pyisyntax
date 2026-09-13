@@ -65,7 +65,7 @@ def create_ffibuilder() -> FFI:
             libisyntax_src / "isyntax" / "isyntax_reader.c",
             libisyntax_src / "utils" / "timerutils.c",
             libisyntax_src / "utils" / "block_allocator.c",
-            libisyntax_src / "utils" / "benaphore.c",
+            libisyntax_src / "platform" / "platform_mutex.c",
             libisyntax_src / "platform" / "platform.c",
             libisyntax_src / "platform" / "work_queue.c",
             libisyntax_src / "third_party" / "yxml.c",
